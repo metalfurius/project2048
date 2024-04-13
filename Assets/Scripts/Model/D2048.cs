@@ -15,4 +15,12 @@ public class D2048
     {
         score += mergedValue;
     }
+
+    public void GenerateNewTile()
+    {
+        int x = Random.Range(0, board.GetLength(0));
+        int y = Random.Range(0, board.GetLength(1));
+
+        board[x, y] = 2;
+    }
 }
