@@ -28,4 +28,49 @@ public class D2048
 
         board[x, y] = 2;
     }
+    public void MoveTiles(Vector2Int direction)
+    {
+        for (int j = 0; j < board.GetLength(1); j++)
+        {
+            MoveTilesInColumn(j);
+        }
+    }
+    private void MoveTilesInColumn(int column)
+    {
+        for (int i = 1; i < board.GetLength(0); i++)
+        {
+            MoveTileUpwardsIfPossible(i, column);
+        }
+    }
+    private void MoveTileUpwardsIfPossible(int row, int column)
+    {
+        if (board[row, column] != 0)
+        {
+            MoveTileUpwards(row, column);
+            CombineTilesIfPossible(row - 1, column, row, column);
+        }
+    }
+    private void MoveTileUpwards(int row, int column)
+    {
+        int currentRow = row;
+
+        while (currentRow > 0 && board[currentRow - 1, column] == 0)
+        {
+            MoveTileOneStepUp(currentRow, column);
+            currentRow--;
+        }
+    }
+    private void MoveTileOneStepUp(int row, int column)
+    {
+        board[row - 1, column] = board[row, column];
+        board[row, column] = 0;
+    }
+    private void CombineTilesIfPossible(int targetRow, int column, int movingRow, int movingColumn)
+    {
+        if (targetRow >= 0 && board[targetRow, column] == board[movingRow, movingColumn])
+        {
+            board[targetRow, column] *= 2;
+            board[movingRow, movingColumn] = 0;
+        }
+    }
 }
