@@ -6,6 +6,7 @@ public class D2048
 {
     public int score;
     public int[,] board;
+    public int numberedCells;
 
     public static readonly Vector2Int Up = new Vector2Int(0, 1);
     public static readonly Vector2Int Down = new Vector2Int(0, -1);
@@ -27,6 +28,7 @@ public class D2048
         int y = Random.Range(0, board.GetLength(1));
 
         board[x, y] = 2;
+        numberedCells++;
     }
     public void MoveTiles(Vector2Int direction)
     {
