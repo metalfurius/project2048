@@ -30,5 +30,8 @@ public class D2048
         board[x, y] = 2;
         numberedCells++;
     }
-    
+    public void MoveTiles(Vector2Int direction)
+    {
+        board[0, 0] = 2;
+    }
 }
