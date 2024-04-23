@@ -45,7 +45,7 @@ public class Tests2048
         Assert.AreEqual(2, game.board[0, 0]);
     }
     [Test]
-    public void TestMoveTileCombine()
+    public void TestMoveUpTileCombine()
     {
         D2048 game = new D2048(0, new Vector2Int(4, 4));
 
@@ -57,7 +57,7 @@ public class Tests2048
         Assert.AreEqual(4, game.board[0, 0]);
     }
     [Test]
-    public void TestMoveTileCleanup()
+    public void TestMoveUpTileCleanup()
     {
         D2048 game = new D2048(0, new Vector2Int(4, 4));
 
@@ -67,5 +67,37 @@ public class Tests2048
         game.MoveTiles(D2048.Up);
 
         Assert.AreEqual(0, game.board[1, 0]);
+    }
+
+    [Test]
+    public void TestMoveUpTilesAllColumnsAndCleanup()
+    {
+        D2048 game = new D2048(0, new Vector2Int(4, 4));
+
+        game.board[0, 0] = 2;
+        game.board[1, 0] = 2;
+
+        game.board[1, 1] = 2;
+        game.board[2, 1] = 2;
+
+        game.board[0, 2] = 2;
+        game.board[3, 2] = 2;
+
+        game.board[0, 3] = 2;
+        game.board[2, 3] = 2;
+
+        game.MoveTiles(D2048.Up);
+
+        Assert.AreEqual(4, game.board[0, 0]);
+        Assert.AreEqual(0, game.board[1, 0]);
+
+        Assert.AreEqual(4, game.board[0, 1]);
+        Assert.AreEqual(0, game.board[1, 1]);
+
+        Assert.AreEqual(4, game.board[0, 2]);
+        Assert.AreEqual(0, game.board[3, 2]);
+
+        Assert.AreEqual(4, game.board[0, 3]);
+        Assert.AreEqual(0, game.board[2, 3]);
     }
 }
