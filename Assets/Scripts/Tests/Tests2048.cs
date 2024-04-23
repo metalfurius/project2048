@@ -9,28 +9,28 @@ public class Tests2048
     [Test]
     public void TestScoreDefault()
     {
-        D2048 test = new D2048(0, new Vector2Int(1,1));
-        Assert.AreEqual(0, test.score);
+        D2048 game = new D2048(0, new Vector2Int(1,1));
+        Assert.AreEqual(0, game.score);
     }
     [Test]
     public void TestScoreAfterMerge()
     {
-        D2048 test = new D2048(0,new Vector2Int(1, 1));
-        test.MergeTiles(8);
-        Assert.AreEqual(8, test.score);
+        D2048 game = new D2048(0,new Vector2Int(1, 1));
+        game.MergeTiles(8);
+        Assert.AreEqual(8, game.score);
     }
     [Test]
     public void TestCreateBoard()
     {
-        D2048 test = new D2048(0, new Vector2Int(1, 1));
-        Assert.IsNotNull(test.board);
+        D2048 game = new D2048(0, new Vector2Int(1, 1));
+        Assert.IsNotNull(game.board);
     }
     [Test]
     public void TestGenerateNewTile()
     {
-        D2048 test = new D2048(0, new Vector2Int(4, 4));
-        test.GenerateNewTile();
-        Assert.IsTrue(test.numberedCells>0);
+        D2048 game = new D2048(0, new Vector2Int(4, 4));
+        game.GenerateNewTile();
+        Assert.IsTrue(game.numberedTiles>0);
     }
 
     [Test]
