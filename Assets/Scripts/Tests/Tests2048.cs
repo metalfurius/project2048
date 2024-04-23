@@ -44,6 +44,7 @@ public class Tests2048
 
         Assert.AreEqual(2, game.board[0, 0]);
     }
+    [Test]
     public void TestMoveTileCombine()
     {
         D2048 game = new D2048(0, new Vector2Int(4, 4));
@@ -55,7 +56,7 @@ public class Tests2048
 
         Assert.AreEqual(4, game.board[0, 0]);
     }
-
+    [Test]
     public void TestMoveTileCleanup()
     {
         D2048 game = new D2048(0, new Vector2Int(4, 4));
