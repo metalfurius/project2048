@@ -33,14 +33,18 @@ public class D2048
     public void MoveTiles(Vector2Int direction)
     {
         int sum = 0;
-        for (int i = 0; i < board.GetLength(0); i++)
+        for (int j = 0; j < board.GetLength(1); j++)
         {
-            sum += board[i, 0];
-            if (i > 0)
+            for (int i = 0; i < board.GetLength(0); i++)
             {
-                board[i, 0] = 0;
+                sum += board[i, j];
+                if (i > 0)
+                {
+                    board[i, j] = 0;
+                }
             }
+            board[0, j] = sum;
+            sum = 0;
         }
-        board[0, 0] = sum;
     }
 }
