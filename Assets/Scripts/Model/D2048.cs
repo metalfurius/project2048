@@ -32,19 +32,37 @@ public class D2048
     }
     public void MoveTiles(Vector2Int direction)
     {
-        int sum = 0;
         for (int j = 0; j < board.GetLength(1); j++)
         {
-            for (int i = 0; i < board.GetLength(0); i++)
+            for (int i = 1; i < board.GetLength(0); i++) // Comenzamos desde la segunda fila
             {
-                sum += board[i, j];
-                if (i > 0)
+                if (board[i, j] != 0) // Ignora las casillas vacías
                 {
-                    board[i, j] = 0;
+                    // Busca la casilla superior no vacía
+                    int targetRow = i - 1;
+                    while (targetRow >= 0 && board[targetRow, j] == 0)
+                    {
+                        targetRow--;
+                    }
+
+                    // Si encontramos una casilla con el mismo valor, combina las casillas
+                    if (targetRow >= 0 && board[targetRow, j] == board[i, j])
+                    {
+                        board[targetRow, j] *= 2;
+                        board[i, j] = 0;
+                        MergeTiles(board[targetRow, j]); // Actualiza la puntuación
+                    }
+                    else
+                    {
+                        // Si no hay combinación, mueve la casilla actual a la posición superior
+                        board[targetRow + 1, j] = board[i, j];
+                        if (targetRow + 1 != i)
+                        {
+                            board[i, j] = 0;
+                        }
+                    }
                 }
             }
-            board[0, j] = sum;
-            sum = 0;
         }
     }
 }
