@@ -111,4 +111,16 @@ public class Tests2048
 
         Assert.AreEqual(2, game.board[1, 3]);
     }
+    [Test]
+    public void TestMoveUpTileNOTCombine()
+    {
+        D2048 game = new D2048(0, new Vector2Int(4, 4));
+
+        game.board[0, 0] = 2;
+        game.board[1, 0] = 4;
+
+        game.MoveTiles(D2048.Up);
+
+        Assert.AreEqual(2, game.board[0, 0]);
+    }
 }
