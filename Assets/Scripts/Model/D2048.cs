@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class D2048
 {
@@ -38,31 +36,44 @@ public class D2048
             {
                 if (board[i, j] != 0) // Ignora las casillas vacías
                 {
-                    // Busca la casilla superior no vacía
-                    int targetRow = i - 1;
-                    while (targetRow >= 0 && board[targetRow, j] == 0)
-                    {
-                        targetRow--;
-                    }
+                    int targetRow = FindTargetRow(i, j, direction); // Busca la casilla objetivo
 
-                    // Si encontramos una casilla con el mismo valor, combina las casillas
-                    if (targetRow >= 0 && board[targetRow, j] == board[i, j])
+                    if (targetRow >= 0 && board[targetRow, j] == board[i, j]) // Comprueba si hay combinación
                     {
-                        board[targetRow, j] *= 2;
-                        board[i, j] = 0;
-                        MergeTiles(board[targetRow, j]); // Actualiza la puntuación
+                        MergeTilesAndUpdateScore(i, j, targetRow); 
                     }
                     else
                     {
-                        // Si no hay combinación, mueve la casilla actual a la posición superior
-                        board[targetRow + 1, j] = board[i, j];
-                        if (targetRow + 1 != i)
-                        {
-                            board[i, j] = 0;
-                        }
+                        MoveTile(i, j, targetRow + 1); // Mueve la casilla a la posición objetivo
                     }
                 }
             }
+        }
+    }
+
+    private int FindTargetRow(int currentRow, int column, Vector2Int direction)
+    {
+        int targetRow = currentRow - 1;
+        while (targetRow >= 0 && board[targetRow, column] == 0)
+        {
+            targetRow--;
+        }
+        return targetRow;
+    }
+
+    private void MergeTilesAndUpdateScore(int currentRow, int column, int targetRow)
+    {
+        board[targetRow, column] *= 2;
+        board[currentRow, column] = 0;
+        MergeTiles(board[targetRow, column]); // Actualiza la puntuación
+    }
+
+    private void MoveTile(int currentRow, int column, int targetRow)
+    {
+        board[targetRow, column] = board[currentRow, column];
+        if (targetRow != currentRow)
+        {
+            board[currentRow, column] = 0;
         }
     }
 }
