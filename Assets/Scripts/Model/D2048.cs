@@ -30,21 +30,46 @@ public class D2048
     }
     public void MoveTiles(Vector2Int direction)
     {
-        for (int j = 0; j < board.GetLength(1); j++)
+        if (direction == Up)
         {
-            for (int i = 1; i < board.GetLength(0); i++) // Comenzamos desde la segunda fila
+            for (int j = 0; j < board.GetLength(1); j++)
             {
-                if (board[i, j] != 0) // Ignora las casillas vacías
+                for (int i = 1; i < board.GetLength(0); i++) // Comenzamos desde la segunda fila
                 {
-                    int targetRow = FindTargetRow(i, j, direction); // Busca la casilla objetivo
+                    if (board[i, j] != 0) // Ignora las casillas vacías
+                    {
+                        int targetRow = FindTargetRow(i, j, direction); // Busca la casilla objetivo
 
-                    if (targetRow >= 0 && board[targetRow, j] == board[i, j]) // Comprueba si hay combinación
-                    {
-                        MergeTilesAndUpdateScore(i, j, targetRow); 
+                        if (targetRow >= 0 && board[targetRow, j] == board[i, j]) // Comprueba si hay combinación
+                        {
+                            MergeTilesAndUpdateScore(i, j, targetRow);
+                        }
+                        else
+                        {
+                            MoveTile(i, j, targetRow + 1); // Mueve la casilla a la posición objetivo
+                        }
                     }
-                    else
+                }
+            }
+        }
+        else if (direction == Down)
+        {
+            for (int j = 0; j < board.GetLength(1); j++)
+            {
+                for (int i = board.GetLength(0) - 2; i >= 0; i--) // Comenzamos desde la penúltima fila
+                {
+                    if (board[i, j] != 0) // Ignora las casillas vacías
                     {
-                        MoveTile(i, j, targetRow + 1); // Mueve la casilla a la posición objetivo
+                        int targetRow = FindTargetRow(i, j, direction); // Busca la casilla objetivo
+
+                        if (targetRow < board.GetLength(0) && board[targetRow, j] == board[i, j]) // Comprueba si hay combinación
+                        {
+                            MergeTilesAndUpdateScore(i, j, targetRow);
+                        }
+                        else
+                        {
+                            MoveTile(i, j, targetRow - 1); // Mueve la casilla a la posición objetivo
+                        }
                     }
                 }
             }
@@ -53,10 +78,10 @@ public class D2048
 
     private int FindTargetRow(int currentRow, int column, Vector2Int direction)
     {
-        int targetRow = currentRow - 1;
-        while (targetRow >= 0 && board[targetRow, column] == 0)
+        int targetRow = currentRow - direction.y;
+        while (targetRow >= 0 && targetRow < board.GetLength(0) && board[targetRow, column] == 0)
         {
-            targetRow--;
+            targetRow -= direction.y;
         }
         return targetRow;
     }
