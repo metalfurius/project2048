@@ -10,14 +10,16 @@ public class D2048
     public static readonly Vector2Int Down = new Vector2Int(0, -1);
     public static readonly Vector2Int Left = new Vector2Int(-1, 0);
     public static readonly Vector2Int Right = new Vector2Int(1, 0);
-    public D2048(int score,Vector2Int board)
+
+    public D2048(int score, Vector2Int boardSize)
     {
         this.score = score;
-        this.board = new int[board.x,board.y];
+        this.board = new int[boardSize.x, boardSize.y];
     }
-    public void MergeTiles(int mergedValue)
+
+    public void AddScore(int points)
     {
-        score += mergedValue;
+        score += points;
     }
 
     public void GenerateNewTile()
@@ -28,25 +30,26 @@ public class D2048
         board[x, y] = 2;
         numberedTiles++;
     }
+
     public void MoveTiles(Vector2Int direction)
     {
         if (direction == Up)
         {
-            for (int j = 0; j < board.GetLength(1); j++)
+            for (int column = 0; column < board.GetLength(1); column++)
             {
-                for (int i = 1; i < board.GetLength(0); i++) // Comenzamos desde la segunda fila
+                for (int row = 1; row < board.GetLength(0); row++) // Comenzamos desde la segunda fila
                 {
-                    if (board[i, j] != 0) // Ignora las casillas vacías
+                    if (board[row, column] != 0) // Ignora las casillas vacías
                     {
-                        int targetRow = FindTargetRow(i, j, direction); // Busca la casilla objetivo
+                        int targetRow = FindTargetRow(row, column, direction); // Busca la casilla objetivo
 
-                        if (targetRow >= 0 && board[targetRow, j] == board[i, j]) // Comprueba si hay combinación
+                        if (targetRow >= 0 && board[targetRow, column] == board[row, column]) // Comprueba si hay combinación
                         {
-                            MergeTilesAndUpdateScore(i, j, targetRow);
+                            MergeTiles(row, column, targetRow, column);
                         }
                         else
                         {
-                            MoveTile(i, j, targetRow + 1, j); // Mueve la casilla a la posición objetivo
+                            MoveTile(row, column, targetRow + 1, column); // Mueve la casilla a la posición objetivo
                         }
                     }
                 }
@@ -54,21 +57,21 @@ public class D2048
         }
         else if (direction == Down)
         {
-            for (int j = 0; j < board.GetLength(1); j++)
+            for (int column = 0; column < board.GetLength(1); column++)
             {
-                for (int i = board.GetLength(0) - 2; i >= 0; i--) // Comenzamos desde la penúltima fila
+                for (int row = board.GetLength(0) - 2; row >= 0; row--) // Comenzamos desde la penúltima fila
                 {
-                    if (board[i, j] != 0) // Ignora las casillas vacías
+                    if (board[row, column] != 0) // Ignora las casillas vacías
                     {
-                        int targetRow = FindTargetRow(i, j, direction); // Busca la casilla objetivo
+                        int targetRow = FindTargetRow(row, column, direction); // Busca la casilla objetivo
 
-                        if (targetRow < board.GetLength(0) && board[targetRow, j] == board[i, j]) // Comprueba si hay combinación
+                        if (targetRow < board.GetLength(0) && board[targetRow, column] == board[row, column]) // Comprueba si hay combinación
                         {
-                            MergeTilesAndUpdateScore(i, j, targetRow);
+                            MergeTiles(row, column, targetRow, column);
                         }
                         else
                         {
-                            MoveTile(i, j, targetRow - 1, j); // Mueve la casilla a la posición objetivo
+                            MoveTile(row, column, targetRow - 1, column); // Mueve la casilla a la posición objetivo
                         }
                     }
                 }
@@ -76,21 +79,21 @@ public class D2048
         }
         else if (direction == Right)
         {
-            for (int i = 0; i < board.GetLength(0); i++)
+            for (int row = 0; row < board.GetLength(0); row++)
             {
-                for (int j = board.GetLength(1) - 2; j >= 0; j--) // Comenzamos desde la penúltima columna
+                for (int column = board.GetLength(1) - 2; column >= 0; column--) // Comenzamos desde la penúltima columna
                 {
-                    if (board[i, j] != 0) // Ignora las casillas vacías
+                    if (board[row, column] != 0) // Ignora las casillas vacías
                     {
-                        int targetColumn = FindTargetColumn(i, j, direction); // Busca la columna objetivo
+                        int targetColumn = FindTargetColumn(row, column, direction); // Busca la columna objetivo
 
-                        if (targetColumn < board.GetLength(1) && board[i, targetColumn] == board[i, j]) // Comprueba si hay combinación
+                        if (targetColumn < board.GetLength(1) && board[row, targetColumn] == board[row, column]) // Comprueba si hay combinación
                         {
-                            MergeTilesAndUpdateScore(i, j, i, targetColumn);
+                            MergeTiles(row, column, row, targetColumn);
                         }
                         else
                         {
-                            MoveTile(i, j, i, targetColumn - 1); // Mueve la casilla a la posición objetivo
+                            MoveTile(row, column, row, targetColumn - 1); // Mueve la casilla a la posición objetivo
                         }
                     }
                 }
@@ -118,26 +121,19 @@ public class D2048
         return targetColumn;
     }
 
-    private void MergeTilesAndUpdateScore(int currentRow, int currentColumn, int targetRow)
-    {
-        board[targetRow, currentColumn] *= 2;
-        board[currentRow, currentColumn] = 0;
-        MergeTiles(board[targetRow, currentColumn]); // Actualiza la puntuación
-    }
-
-    private void MergeTilesAndUpdateScore(int currentRow, int currentColumn, int targetRow, int targetColumn)
+    private void MergeTiles(int sourceRow, int sourceColumn, int targetRow, int targetColumn)
     {
         board[targetRow, targetColumn] *= 2;
-        board[currentRow, currentColumn] = 0;
-        MergeTiles(board[targetRow, targetColumn]); // Actualiza la puntuación
+        board[sourceRow, sourceColumn] = 0;
+        AddScore(board[targetRow, targetColumn]); // Actualiza la puntuación
     }
 
-    private void MoveTile(int currentRow, int currentColumn, int targetRow, int targetColumn)
+    private void MoveTile(int sourceRow, int sourceColumn, int targetRow, int targetColumn)
     {
-        board[targetRow, targetColumn] = board[currentRow, currentColumn];
-        if (targetRow != currentRow || targetColumn != currentColumn)
+        board[targetRow, targetColumn] = board[sourceRow, sourceColumn];
+        if (targetRow != sourceRow || targetColumn != sourceColumn)
         {
-            board[currentRow, currentColumn] = 0;
+            board[sourceRow, sourceColumn] = 0;
         }
     }
 }

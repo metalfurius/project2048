@@ -16,7 +16,7 @@ public class Tests2048
     public void TestScoreAfterMerge()
     {
         D2048 game = new D2048(0,new Vector2Int(1, 1));
-        game.MergeTiles(8);
+        game.AddScore(8);
         Assert.AreEqual(8, game.score);
     }
     [Test]
