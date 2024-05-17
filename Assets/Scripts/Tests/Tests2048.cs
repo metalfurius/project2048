@@ -134,4 +134,15 @@ public class Tests2048
 
         Assert.AreEqual(2, game.board[3, 0]);
     }
+    [Test]
+    public void TestMoveTilesLeft()
+    {
+        D2048 game = new D2048(0, new Vector2Int(4, 4));
+
+        game.board[1, 3] = 2;
+
+        game.MoveTiles(D2048.Right);
+
+        Assert.AreEqual(2, game.board[1, 0]);
+    }
 }
