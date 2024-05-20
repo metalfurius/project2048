@@ -13,7 +13,7 @@ public class D2048
 
     public D2048(Vector2Int boardSize)
     {
-        this.board = new int[boardSize.x, boardSize.y];
+        board = new int[boardSize.x, boardSize.y];
         score = 0;
     }
 
