@@ -9,26 +9,26 @@ public class Tests2048
     [Test]
     public void TestScoreDefault()
     {
-        D2048 game = new D2048(0, new Vector2Int(1,1));
+        D2048 game = new D2048(new Vector2Int(1,1));
         Assert.AreEqual(0, game.score);
     }
     [Test]
     public void TestScoreAfterMerge()
     {
-        D2048 game = new D2048(0,new Vector2Int(1, 1));
+        D2048 game = new D2048(new Vector2Int(1, 1));
         game.AddScore(8);
         Assert.AreEqual(8, game.score);
     }
     [Test]
     public void TestCreateBoard()
     {
-        D2048 game = new D2048(0, new Vector2Int(1, 1));
+        D2048 game = new D2048(new Vector2Int(1, 1));
         Assert.IsNotNull(game.board);
     }
     [Test]
     public void TestGenerateNewTile()
     {
-        D2048 game = new D2048(0, new Vector2Int(4, 4));
+        D2048 game = new D2048(new Vector2Int(4, 4));
         game.GenerateNewTile();
         Assert.IsTrue(game.numberedTiles>0);
     }
@@ -36,7 +36,7 @@ public class Tests2048
     [Test]
     public void TestMoveTilesUp()
     {
-        D2048 game = new D2048(0, new Vector2Int(4, 4));
+        D2048 game = new D2048(new Vector2Int(4, 4));
 
         game.board[1, 0] = 2;
 
@@ -47,7 +47,7 @@ public class Tests2048
     [Test]
     public void TestMoveUpTileCombine()
     {
-        D2048 game = new D2048(0, new Vector2Int(4, 4));
+        D2048 game = new D2048(new Vector2Int(4, 4));
 
         game.board[0, 0] = 2;
         game.board[1, 0] = 2;
@@ -59,7 +59,7 @@ public class Tests2048
     [Test]
     public void TestMoveUpTileCleanup()
     {
-        D2048 game = new D2048(0, new Vector2Int(4, 4));
+        D2048 game = new D2048(new Vector2Int(4, 4));
 
         game.board[0, 0] = 2;
         game.board[1, 0] = 2;
@@ -72,7 +72,7 @@ public class Tests2048
     [Test]
     public void TestMoveUpTilesAllColumnsAndCleanup()
     {
-        D2048 game = new D2048(0, new Vector2Int(4, 4));
+        D2048 game = new D2048(new Vector2Int(4, 4));
 
         game.board[0, 0] = 2;
         game.board[1, 0] = 2;
@@ -103,7 +103,7 @@ public class Tests2048
     [Test]
     public void TestMoveTilesRight()
     {
-        D2048 game = new D2048(0, new Vector2Int(4, 4));
+        D2048 game = new D2048(new Vector2Int(4, 4));
 
         game.board[1, 0] = 2;
 
@@ -114,7 +114,7 @@ public class Tests2048
     [Test]
     public void TestMoveUpTileNOTCombine()
     {
-        D2048 game = new D2048(0, new Vector2Int(4, 4));
+        D2048 game = new D2048(new Vector2Int(4, 4));
 
         game.board[0, 0] = 2;
         game.board[1, 0] = 4;
@@ -126,7 +126,7 @@ public class Tests2048
     [Test]
     public void TestMoveTilesDown()
     {
-        D2048 game = new D2048(0, new Vector2Int(4, 4));
+        D2048 game = new D2048(new Vector2Int(4, 4));
 
         game.board[1, 0] = 2;
 
@@ -137,7 +137,7 @@ public class Tests2048
     [Test]
     public void TestMoveTilesLeft()
     {
-        D2048 game = new D2048(0, new Vector2Int(4, 4));
+        D2048 game = new D2048(new Vector2Int(4, 4));
 
         game.board[1, 3] = 2;
 

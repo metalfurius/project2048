@@ -11,10 +11,18 @@ public class D2048
     public static readonly Vector2Int Left = new Vector2Int(-1, 0);
     public static readonly Vector2Int Right = new Vector2Int(1, 0);
 
-    public D2048(int score, Vector2Int boardSize)
+    public D2048(Vector2Int boardSize)
     {
-        this.score = score;
         this.board = new int[boardSize.x, boardSize.y];
+        score = 0;
+    }
+
+    public D2048(Vector2Int boardSize, int startingCells) : this(boardSize)
+    {
+        for (int i = 0; i < startingCells; i++)
+        {
+            GenerateNewTile();
+        }
     }
 
     public void AddScore(int points)
