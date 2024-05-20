@@ -141,7 +141,7 @@ public class Tests2048
 
         game.board[1, 3] = 2;
 
-        game.MoveTiles(D2048.Right);
+        game.MoveTiles(D2048.Left);
 
         Assert.AreEqual(2, game.board[1, 0]);
     }

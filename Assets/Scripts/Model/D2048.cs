@@ -99,6 +99,26 @@ public class D2048
                 }
             }
         }
+        else if (direction == Left)
+        {
+            for (int row = 0; row < board.GetLength(0); row++)
+            {
+                for (int column = 1; column < board.GetLength(1); column++){
+                    if (board[row, column] != 0)
+                    {
+                        int targetColumn = FindTargetColumn(row, column, direction);
+                        if (targetColumn >= 0 && board[row, targetColumn] == board[row, column]) // Comprueba si hay combinación
+                        {
+                            MergeTiles(row, column, row, targetColumn);
+                        }
+                        else
+                        {
+                            MoveTile(row, column, row, targetColumn + 1); // Mueve la casilla a la posición objetivo
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private int FindTargetRow(int currentRow, int column, Vector2Int direction)
