@@ -9,5 +9,7 @@ public class Dependencies : MonoBehaviour
     private void Start()
     {
         D2048 d2048 = new D2048(size,size.x);
+        Board board = FindObjectOfType<Board>();
+        board.Setup(d2048);
     }
 }
