@@ -50,10 +50,44 @@ public class D2048
         if (emptyTiles.Count > 0)
         {
             Vector2Int randomTile = emptyTiles[Random.Range(0, emptyTiles.Count)];
-            board[randomTile.x, randomTile.y] = 2;
+            int maxTileValue = GetMaxTileValue();
+            // Calcula el valor máximo permitido para una nueva ficha (máximo presente dividido por cuatro)
+            int maxValueForNewTile = Mathf.Max(2, maxTileValue / 4);
+            int newTileValue = GetRandomTileValue(maxValueForNewTile);
+
+            board[randomTile.x, randomTile.y] = newTileValue;
             numberedTiles++;
         }
     }
+
+    private int GetMaxTileValue()
+    {
+        int maxTileValue = 0;
+        for (int x = 0; x < board.GetLength(0); x++)
+        {
+            for (int y = 0; y < board.GetLength(1); y++)
+            {
+                if (board[x, y] > maxTileValue)
+                {
+                    maxTileValue = board[x, y];
+                }
+            }
+        }
+        return maxTileValue;
+    }
+
+    private int GetRandomTileValue(int maxValueForNewTile)
+    {
+        List<int> possibleValues = new List<int>();
+        int value = 2;
+        while (value <= maxValueForNewTile)
+        {
+            possibleValues.Add(value);
+            value *= 2;
+        }
+        return possibleValues[Random.Range(0, possibleValues.Count)];
+    }
+
 
     public void MoveTiles(Vector2Int direction)
     {
