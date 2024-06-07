@@ -6,10 +6,10 @@ public class D2048
     public int[,] board;
     public int numberedTiles;
 
-    public static readonly Vector2Int Up = new Vector2Int(0, 1);
-    public static readonly Vector2Int Down = new Vector2Int(0, -1);
-    public static readonly Vector2Int Left = new Vector2Int(-1, 0);
-    public static readonly Vector2Int Right = new Vector2Int(1, 0);
+    public static readonly Vector2Int Up = new(0, 1);
+    public static readonly Vector2Int Down = new(0, -1);
+    public static readonly Vector2Int Left = new(-1, 0);
+    public static readonly Vector2Int Right = new(1, 0);
 
     public D2048(Vector2Int boardSize)
     {
@@ -35,8 +35,11 @@ public class D2048
         int x = Random.Range(0, board.GetLength(0));
         int y = Random.Range(0, board.GetLength(1));
 
-        board[x, y] = 2;
-        numberedTiles++;
+        if (board[x, y] == 0)
+        {
+            board[x, y] = 2;
+        }
+            numberedTiles++;
     }
 
     public void MoveTiles(Vector2Int direction)
@@ -127,6 +130,7 @@ public class D2048
                 }
             }
         }
+        GenerateNewTile();
     }
 
     private int FindTargetRow(int currentRow, int column, Vector2Int direction)
