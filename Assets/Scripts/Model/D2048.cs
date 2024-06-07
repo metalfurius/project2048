@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class D2048
 {
@@ -32,14 +33,26 @@ public class D2048
 
     public void GenerateNewTile()
     {
-        int x = Random.Range(0, board.GetLength(0));
-        int y = Random.Range(0, board.GetLength(1));
+        List<Vector2Int> emptyTiles = new();
 
-        if (board[x, y] == 0)
+        // Recopila todas las casillas vacías
+        for (int x = 0; x < board.GetLength(0); x++)
         {
-            board[x, y] = 2;
+            for (int y = 0; y < board.GetLength(1); y++)
+            {
+                if (board[x, y] == 0)
+                {
+                    emptyTiles.Add(new Vector2Int(x, y));
+                }
+            }
         }
+
+        if (emptyTiles.Count > 0)
+        {
+            Vector2Int randomTile = emptyTiles[Random.Range(0, emptyTiles.Count)];
+            board[randomTile.x, randomTile.y] = 2;
             numberedTiles++;
+        }
     }
 
     public void MoveTiles(Vector2Int direction)
