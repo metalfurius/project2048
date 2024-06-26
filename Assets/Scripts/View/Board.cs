@@ -10,6 +10,7 @@ public class Board : MonoBehaviour
 
     private D2048 d2048;
     private TileColors tileColors;
+    private Score score;
     private InputHandler inputHandler;
 
     public void Setup(D2048 d2048)
@@ -17,6 +18,8 @@ public class Board : MonoBehaviour
         this.d2048 = d2048;
         this.tileColors = new TileColors();
         this.inputHandler = GetComponent<InputHandler>();
+        this.score = new Score(scoreText,d2048);
+
         StartBoard(d2048);
         board.GetComponent<GridLayoutGroup>().constraintCount = d2048.board.GetLength(0);
 
@@ -57,22 +60,13 @@ public class Board : MonoBehaviour
                 SetTileColor(_child, tileValue);
             }
         }
-        UpdateScore();
     }
     private void MoveBoard(Vector2Int direction)
     {
         d2048.MoveTiles(direction);
         UpdateBoard();
+        score.UpdateScore();
     }
-
-    private void UpdateScore()
-    {
-        if (scoreText != null)
-        {
-            scoreText.text = "Score: " + d2048.score.ToString();
-        }
-    }
-
     private void SetTileColor(Transform tile, int value)
     {
         Image tileImage = tile.GetComponentInChildren<Image>();
