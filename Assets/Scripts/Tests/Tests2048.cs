@@ -40,7 +40,7 @@ public class Tests2048
 
         game.board[1, 0] = 2;
 
-        game.MoveTiles(D2048.Up);
+        game.MoveTilesTESTS(D2048.Up);
 
         Assert.AreEqual(2, game.board[0, 0]);
     }
@@ -52,7 +52,7 @@ public class Tests2048
         game.board[0, 0] = 2;
         game.board[1, 0] = 2;
 
-        game.MoveTiles(D2048.Up);
+        game.MoveTilesTESTS(D2048.Up);
 
         Assert.AreEqual(4, game.board[0, 0]);
     }
@@ -64,7 +64,7 @@ public class Tests2048
         game.board[0, 0] = 2;
         game.board[1, 0] = 2;
 
-        game.MoveTiles(D2048.Up);
+        game.MoveTilesTESTS(D2048.Up);
 
         Assert.AreEqual(0, game.board[1, 0]);
     }
@@ -86,7 +86,7 @@ public class Tests2048
         game.board[0, 3] = 2;
         game.board[2, 3] = 2;
 
-        game.MoveTiles(D2048.Up);
+        game.MoveTilesTESTS(D2048.Up);
 
         Assert.AreEqual(4, game.board[0, 0]);
         Assert.AreEqual(0, game.board[1, 0]);
@@ -107,7 +107,7 @@ public class Tests2048
 
         game.board[1, 0] = 2;
 
-        game.MoveTiles(D2048.Right);
+        game.MoveTilesTESTS(D2048.Right);
 
         Assert.AreEqual(2, game.board[1, 3]);
     }
@@ -119,7 +119,7 @@ public class Tests2048
         game.board[0, 0] = 2;
         game.board[1, 0] = 4;
 
-        game.MoveTiles(D2048.Up);
+        game.MoveTilesTESTS(D2048.Up);
 
         Assert.AreEqual(2, game.board[0, 0]);
     }
@@ -130,7 +130,7 @@ public class Tests2048
 
         game.board[1, 0] = 2;
 
-        game.MoveTiles(D2048.Down);
+        game.MoveTilesTESTS(D2048.Down);
 
         Assert.AreEqual(2, game.board[3, 0]);
     }
@@ -141,7 +141,7 @@ public class Tests2048
 
         game.board[1, 3] = 2;
 
-        game.MoveTiles(D2048.Left);
+        game.MoveTilesTESTS(D2048.Left);
 
         Assert.AreEqual(2, game.board[1, 0]);
     }

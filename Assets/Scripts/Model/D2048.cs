@@ -117,6 +117,25 @@ public class D2048
         }
         GenerateNewTile();
     }
+    public void MoveTilesTESTS(Vector2Int direction)
+    {
+        if (direction == Up)
+        {
+            MoveUp();
+        }
+        else if (direction == Down)
+        {
+            MoveDown();
+        }
+        else if (direction == Right)
+        {
+            MoveRight();
+        }
+        else if (direction == Left)
+        {
+            MoveLeft();
+        }
+    }
 
     private void MoveUp()
     {
