@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dependencies : MonoBehaviour
+public class EntryPoint : MonoBehaviour
 {
     [SerializeField]
     private Vector2Int size = new(7, 7);
