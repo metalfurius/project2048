@@ -101,91 +101,125 @@ public class D2048
     {
         if (direction == Up)
         {
-            for (int column = 0; column < board.GetLength(1); column++)
-            {
-                for (int row = 1; row < board.GetLength(0); row++) // Comenzamos desde la segunda fila
-                {
-                    if (board[row, column] != 0) // Ignora las casillas vacías
-                    {
-                        int targetRow = FindTargetRow(row, column, direction); // Busca la casilla objetivo
-
-                        if (targetRow >= 0 && board[targetRow, column] == board[row, column]) // Comprueba si hay combinación
-                        {
-                            MergeTiles(row, column, targetRow, column);
-                        }
-                        else
-                        {
-                            MoveTile(row, column, targetRow + 1, column); // Mueve la casilla a la posición objetivo
-                        }
-                    }
-                }
-            }
+            MoveUp();
         }
         else if (direction == Down)
         {
-            for (int column = 0; column < board.GetLength(1); column++)
-            {
-                for (int row = board.GetLength(0) - 2; row >= 0; row--) // Comenzamos desde la penúltima fila
-                {
-                    if (board[row, column] != 0) // Ignora las casillas vacías
-                    {
-                        int targetRow = FindTargetRow(row, column, direction); // Busca la casilla objetivo
-
-                        if (targetRow < board.GetLength(0) && board[targetRow, column] == board[row, column]) // Comprueba si hay combinación
-                        {
-                            MergeTiles(row, column, targetRow, column);
-                        }
-                        else
-                        {
-                            MoveTile(row, column, targetRow - 1, column); // Mueve la casilla a la posición objetivo
-                        }
-                    }
-                }
-            }
+            MoveDown();
         }
         else if (direction == Right)
         {
-            for (int row = 0; row < board.GetLength(0); row++)
-            {
-                for (int column = board.GetLength(1) - 2; column >= 0; column--) // Comenzamos desde la penúltima columna
-                {
-                    if (board[row, column] != 0) // Ignora las casillas vacías
-                    {
-                        int targetColumn = FindTargetColumn(row, column, direction); // Busca la columna objetivo
-
-                        if (targetColumn < board.GetLength(1) && board[row, targetColumn] == board[row, column]) // Comprueba si hay combinación
-                        {
-                            MergeTiles(row, column, row, targetColumn);
-                        }
-                        else
-                        {
-                            MoveTile(row, column, row, targetColumn - 1); // Mueve la casilla a la posición objetivo
-                        }
-                    }
-                }
-            }
+            MoveRight();
         }
         else if (direction == Left)
         {
-            for (int row = 0; row < board.GetLength(0); row++)
+            MoveLeft();
+        }
+        GenerateNewTile();
+    }
+
+    private void MoveUp()
+    {
+        for (int column = 0; column < board.GetLength(1); column++)
+        {
+            for (int row = 1; row < board.GetLength(0); row++)
             {
-                for (int column = 1; column < board.GetLength(1); column++){
-                    if (board[row, column] != 0)
+                if (!IsTileEmpty(row, column))
+                {
+                    int targetRow = FindTargetRow(row, column, Up);
+
+                    if (CanMerge(row, column, targetRow, column))
                     {
-                        int targetColumn = FindTargetColumn(row, column, direction);
-                        if (targetColumn >= 0 && board[row, targetColumn] == board[row, column]) // Comprueba si hay combinación
-                        {
-                            MergeTiles(row, column, row, targetColumn);
-                        }
-                        else
-                        {
-                            MoveTile(row, column, row, targetColumn + 1); // Mueve la casilla a la posición objetivo
-                        }
+                        MergeTiles(row, column, targetRow, column);
+                    }
+                    else
+                    {
+                        MoveTile(row, column, targetRow + 1, column);
                     }
                 }
             }
         }
-        GenerateNewTile();
+    }
+
+    private void MoveDown()
+    {
+        for (int column = 0; column < board.GetLength(1); column++)
+        {
+            for (int row = board.GetLength(0) - 2; row >= 0; row--)
+            {
+                if (!IsTileEmpty(row, column))
+                {
+                    int targetRow = FindTargetRow(row, column, Down);
+
+                    if (CanMerge(row, column, targetRow, column))
+                    {
+                        MergeTiles(row, column, targetRow, column);
+                    }
+                    else
+                    {
+                        MoveTile(row, column, targetRow - 1, column);
+                    }
+                }
+            }
+        }
+    }
+
+    private void MoveRight()
+    {
+        for (int row = 0; row < board.GetLength(0); row++)
+        {
+            for (int column = board.GetLength(1) - 2; column >= 0; column--)
+            {
+                if (!IsTileEmpty(row, column))
+                {
+                    int targetColumn = FindTargetColumn(row, column, Right);
+
+                    if (CanMerge(row, column, row, targetColumn))
+                    {
+                        MergeTiles(row, column, row, targetColumn);
+                    }
+                    else
+                    {
+                        MoveTile(row, column, row, targetColumn - 1);
+                    }
+                }
+            }
+        }
+    }
+
+    private void MoveLeft()
+    {
+        for (int row = 0; row < board.GetLength(0); row++)
+        {
+            for (int column = 1; column < board.GetLength(1); column++)
+            {
+                if (!IsTileEmpty(row, column))
+                {
+                    int targetColumn = FindTargetColumn(row, column, Left);
+
+                    if (CanMerge(row, column, row, targetColumn))
+                    {
+                        MergeTiles(row, column, row, targetColumn);
+                    }
+                    else
+                    {
+                        MoveTile(row, column, row, targetColumn + 1);
+                    }
+                }
+            }
+        }
+    }
+
+    private bool IsTileEmpty(int row, int column)
+    {
+        return board[row, column] == 0;
+    }
+
+    private bool CanMerge(int sourceRow, int sourceColumn, int targetRow, int targetColumn)
+    {
+        return targetRow >= 0 && targetColumn >= 0 &&
+               targetRow < board.GetLength(0) && targetColumn < board.GetLength(1) &&
+               board[targetRow, targetColumn] == board[sourceRow, sourceColumn];
     }
 
     private int FindTargetRow(int currentRow, int column, Vector2Int direction)
@@ -212,7 +246,7 @@ public class D2048
     {
         board[targetRow, targetColumn] *= 2;
         board[sourceRow, sourceColumn] = 0;
-        AddScore(board[targetRow, targetColumn]); // Actualiza la puntuación
+        AddScore(board[targetRow, targetColumn]);
     }
 
     private void MoveTile(int sourceRow, int sourceColumn, int targetRow, int targetColumn)
