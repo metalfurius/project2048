@@ -34,7 +34,27 @@ public class D2048
     public void GenerateNewTile()
     {
         List<Vector2Int> emptyTiles = new();
+        GetEmptyTiles(emptyTiles);
 
+        if (emptyTiles.Count <= 0)
+        {
+            return;
+        }
+
+        GetNewRandomTileValue(emptyTiles, out Vector2Int randomTile, out int newTileValue);
+        board[randomTile.x, randomTile.y] = newTileValue;
+        numberedTiles++;
+    }
+
+    private void GetNewRandomTileValue(List<Vector2Int> emptyTiles, out Vector2Int randomTile, out int newTileValue)
+    {
+        randomTile = emptyTiles[Random.Range(0, emptyTiles.Count)];
+        int maxValueForNewTile = Mathf.Max(2, GetMaxTileValue() / 4);
+        newTileValue = GetRandomTileValue(maxValueForNewTile);
+    }
+
+    private void GetEmptyTiles(List<Vector2Int> emptyTiles)
+    {
         // Recopila todas las casillas vacías
         for (int x = 0; x < board.GetLength(0); x++)
         {
@@ -45,18 +65,6 @@ public class D2048
                     emptyTiles.Add(new Vector2Int(x, y));
                 }
             }
-        }
-
-        if (emptyTiles.Count > 0)
-        {
-            Vector2Int randomTile = emptyTiles[Random.Range(0, emptyTiles.Count)];
-            int maxTileValue = GetMaxTileValue();
-            // Calcula el valor máximo permitido para una nueva ficha (máximo presente dividido por cuatro)
-            int maxValueForNewTile = Mathf.Max(2, maxTileValue / 4);
-            int newTileValue = GetRandomTileValue(maxValueForNewTile);
-
-            board[randomTile.x, randomTile.y] = newTileValue;
-            numberedTiles++;
         }
     }
 
