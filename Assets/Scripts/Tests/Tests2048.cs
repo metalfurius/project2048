@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Tests2048
@@ -142,4 +143,18 @@ public class Tests2048
 
         Assert.AreEqual(2, game.board[1, 0]);
     }
+    [Test]
+    public void TestSourceDestinationMovements()
+    {
+        D2048 game = new D2048(new Vector2Int(4, 4));
+        Movement movementsTest = new Movement(new Vector2Int(1, 3), new Vector2Int(1, 0));
+
+        game.board[1, 3] = 2;
+        game.MoveTilesTESTS(D2048.Left);
+
+        List<Movement> movements = game.GetMovements();
+        Assert.AreEqual(movementsTest.Start, movements[0].Start);
+        Assert.AreEqual(movementsTest.End, movements[0].End);
+    }
+
 }
