@@ -101,7 +101,7 @@ public class D2048
 
     public void MoveTiles(Vector2Int direction)
     {
-        movements.Clear(); 
+        movements.Clear();
 
         if (direction == Up)
         {
@@ -121,6 +121,7 @@ public class D2048
         }
         GenerateNewTile();
     }
+
     public void MoveTilesTESTS(Vector2Int direction)
     {
         movements.Clear();
@@ -288,17 +289,5 @@ public class D2048
 
             movements.Add(new Movement(new Vector2Int(sourceRow, sourceColumn), new Vector2Int(targetRow, targetColumn)));
         }
-    }
-}
-
-public class Movement
-{
-    public Vector2Int Start { get; private set; }
-    public Vector2Int End { get; private set; }
-
-    public Movement(Vector2Int start, Vector2Int end)
-    {
-        Start = start;
-        End = end;
     }
 }
