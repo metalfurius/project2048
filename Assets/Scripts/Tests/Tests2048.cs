@@ -156,5 +156,31 @@ public class Tests2048
         Assert.AreEqual(movementsTest.Start, movements[0].Start);
         Assert.AreEqual(movementsTest.End, movements[0].End);
     }
+    [Test]
+    public void TestMultipleSourceDestinationMovements()
+    {
+        D2048 game = new D2048(new Vector2Int(4, 4));
+
+        game.board[1, 3] = 2;
+        game.board[2, 3] = 2;
+        game.board[3, 3] = 4;
+
+        List<Movement> expectedMovements = new List<Movement>
+        {
+        new Movement(new Vector2Int(1, 3), new Vector2Int(1, 0)),
+        new Movement(new Vector2Int(2, 3), new Vector2Int(2, 0)),
+        new Movement(new Vector2Int(3, 3), new Vector2Int(3, 0))
+        };
+
+        game.MoveTilesTESTS(D2048.Left);
+
+        List<Movement> movements = game.GetMovements();
+
+        for (int i = 0; i < expectedMovements.Count; i++)
+        {
+            Assert.AreEqual(expectedMovements[i].Start, movements[i].Start);
+            Assert.AreEqual(expectedMovements[i].End, movements[i].End);
+        }
+    }
 
 }
