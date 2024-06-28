@@ -12,10 +12,13 @@ public class D2048
     public static readonly Vector2Int Left = new(-1, 0);
     public static readonly Vector2Int Right = new(1, 0);
 
+    private List<Movement> movements;
+
     public D2048(Vector2Int boardSize)
     {
         board = new int[boardSize.x, boardSize.y];
         score = 0;
+        movements = new List<Movement>();
     }
 
     public D2048(Vector2Int boardSize, int startingCells) : this(boardSize)
@@ -96,9 +99,10 @@ public class D2048
         return possibleValues[Random.Range(0, possibleValues.Count)];
     }
 
-
     public void MoveTiles(Vector2Int direction)
     {
+        movements.Clear(); 
+
         if (direction == Up)
         {
             MoveUp();
@@ -119,6 +123,8 @@ public class D2048
     }
     public void MoveTilesTESTS(Vector2Int direction)
     {
+        movements.Clear();
+
         if (direction == Up)
         {
             MoveUp();
@@ -135,6 +141,11 @@ public class D2048
         {
             MoveLeft();
         }
+    }
+
+    public List<Movement> GetMovements()
+    {
+        return new List<Movement>(movements);
     }
 
     private void MoveUp()
@@ -270,10 +281,24 @@ public class D2048
 
     private void MoveTile(int sourceRow, int sourceColumn, int targetRow, int targetColumn)
     {
-        board[targetRow, targetColumn] = board[sourceRow, sourceColumn];
         if (targetRow != sourceRow || targetColumn != sourceColumn)
         {
+            board[targetRow, targetColumn] = board[sourceRow, sourceColumn];
             board[sourceRow, sourceColumn] = 0;
+
+            movements.Add(new Movement(new Vector2Int(sourceRow, sourceColumn), new Vector2Int(targetRow, targetColumn)));
         }
+    }
+}
+
+public class Movement
+{
+    public Vector2Int Start { get; private set; }
+    public Vector2Int End { get; private set; }
+
+    public Movement(Vector2Int start, Vector2Int end)
+    {
+        Start = start;
+        End = end;
     }
 }
