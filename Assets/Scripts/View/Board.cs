@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;  // Asegúrate de agregar esto para la lista de movimientos
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +16,7 @@ public class Board : MonoBehaviour
     private BoardRenderer boardRenderer;
     private InputHandler inputHandler;
     private TileCreator tileCreator;
+    private BoardAnimator boardAnimator;
 
     public void Setup(D2048 d2048)
     {
@@ -23,6 +25,7 @@ public class Board : MonoBehaviour
         this.tileCreator = new TileCreator(board, tilePrefab, d2048.board.GetLength(0), d2048.board.GetLength(1));
         this.boardRenderer = new BoardRenderer(board, d2048);
         this.score = new Score(scoreText, d2048);
+        this.boardAnimator = new BoardAnimator(this, inputHandler, tileCreator, boardRenderer, score, totalAnimationDuration);
 
         tileCreator.CreateBoard();
         boardRenderer.RenderBoard();
@@ -37,71 +40,11 @@ public class Board : MonoBehaviour
     private void MoveBoard(Vector2Int direction)
     {
         d2048.MoveTiles(direction);
-        StartCoroutine(AnimateMovements());
+        StartCoroutine(boardAnimator.AnimateMovements(d2048.GetMovements()));
     }
 
-    private IEnumerator AnimateMovements()
+    public int GetTileValue(Vector2Int position)
     {
-        // Desactivar el InputHandler para evitar movimientos durante la animación
-        inputHandler.enabled = false;
-
-        var movements = d2048.GetMovements();
-        Transform canvasTransform = board.parent;  // Acceder al padre de board, que es el Canvas
-        Vector2 tileSize = tileCreator.GetTileSize();  // Obtener las dimensiones de las casillas
-
-        // Calcular la duración de cada movimiento individual
-        float individualDuration = totalAnimationDuration / movements.Count;
-
-        foreach (var movement in movements)
-        {
-            Vector2Int startPos = movement.Start;
-            Vector2Int endPos = movement.End;
-            int value = d2048.board[endPos.x, endPos.y];
-            Color originalColor = tileCreator.GetTileColor(startPos);
-
-            // Instanciar una casilla copia como hijo del Canvas con el tamaño y color adecuados
-            Vector3 startWorldPos = tileCreator.GetWorldPosition(startPos);
-            GameObject tileCopy = tileCreator.CreateTileInstance(startWorldPos, value, canvasTransform, tileSize, originalColor);
-
-            // Poner la casilla original a 0 y en color blanco
-            boardRenderer.SetTileValue(startPos, 0);
-            boardRenderer.SetTileColor(startPos, 0);
-
-            // Lerpear la copia a la posición final
-            yield return StartCoroutine(LerpTile(tileCopy, startPos, endPos, individualDuration));
-
-            // Poner la casilla de la posición final al valor que tenga la copia
-            boardRenderer.SetTileValue(endPos, value);
-
-            // Si es una fusión, actualizar el color de la casilla final
-            if (movement.IsMerge)
-            {
-                boardRenderer.SetTileColor(endPos, value);
-            }
-
-            // Destruir la instancia copia
-            Destroy(tileCopy);
-        }
-
-        boardRenderer.RenderBoard();
-        score.UpdateScore();
-
-        // Reactivar el InputHandler después de la animación
-        inputHandler.enabled = true;
-    }
-    private IEnumerator LerpTile(GameObject tile, Vector2Int startPos, Vector2Int endPos, float duration)
-    {
-        Vector3 start = tileCreator.GetWorldPosition(startPos);
-        Vector3 end = tileCreator.GetWorldPosition(endPos);
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            tile.transform.position = Vector3.Lerp(start, end, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        tile.transform.position = end;
+        return d2048.board[position.x, position.y];
     }
 }

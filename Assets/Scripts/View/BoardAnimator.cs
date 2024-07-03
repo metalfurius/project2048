@@ -1,0 +1,79 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class BoardAnimator
+{
+    private Board board;
+    private InputHandler inputHandler;
+    private TileCreator tileCreator;
+    private BoardRenderer boardRenderer;
+    private Score score;
+    private float totalAnimationDuration;
+
+    public BoardAnimator(Board board, InputHandler inputHandler, TileCreator tileCreator, BoardRenderer boardRenderer, Score score, float totalAnimationDuration)
+    {
+        this.board = board;
+        this.inputHandler = inputHandler;
+        this.tileCreator = tileCreator;
+        this.boardRenderer = boardRenderer;
+        this.score = score;
+        this.totalAnimationDuration = totalAnimationDuration;
+    }
+
+    public IEnumerator AnimateMovements(List<Movement> movements)
+    {
+        inputHandler.enabled = false;
+
+        Transform canvasTransform = Object.FindAnyObjectByType<Canvas>().transform;
+        Vector2 tileSize = tileCreator.GetTileSize();  // Obtener las dimensiones de las casillas
+
+        float individualDuration = totalAnimationDuration / movements.Count;
+
+        foreach (var movement in movements)
+        {
+            Vector2Int startPos = movement.Start;
+            Vector2Int endPos = movement.End;
+            int value = board.GetTileValue(endPos);
+            Color originalColor = tileCreator.GetTileColor(startPos);
+
+            Vector3 startWorldPos = tileCreator.GetWorldPosition(startPos);
+            GameObject tileCopy = tileCreator.CreateTileInstance(startWorldPos, value, canvasTransform, tileSize, originalColor);
+
+            boardRenderer.SetTileValue(startPos, 0);
+            boardRenderer.SetTileColor(startPos, 0);
+
+            yield return board.StartCoroutine(LerpTile(tileCopy, startPos, endPos, individualDuration));
+
+            boardRenderer.SetTileValue(endPos, value);
+
+            if (movement.IsMerge)
+            {
+                boardRenderer.SetTileColor(endPos, value);
+            }
+
+            Object.Destroy(tileCopy);
+        }
+
+        boardRenderer.RenderBoard();
+        score.UpdateScore();
+
+        inputHandler.enabled = true;
+    }
+
+    private IEnumerator LerpTile(GameObject tile, Vector2Int startPos, Vector2Int endPos, float duration)
+    {
+        Vector3 start = tileCreator.GetWorldPosition(startPos);
+        Vector3 end = tileCreator.GetWorldPosition(endPos);
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            tile.transform.position = Vector3.Lerp(start, end, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        tile.transform.position = end;
+    }
+}
