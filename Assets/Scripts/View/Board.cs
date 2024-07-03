@@ -8,6 +8,7 @@ public class Board : MonoBehaviour
     [SerializeField] private Transform board;
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private float totalAnimationDuration = 2f;
 
     private D2048 d2048;
     private Score score;
@@ -48,6 +49,9 @@ public class Board : MonoBehaviour
         Transform canvasTransform = board.parent;  // Acceder al padre de board, que es el Canvas
         Vector2 tileSize = tileCreator.GetTileSize();  // Obtener las dimensiones de las casillas
 
+        // Calcular la duración de cada movimiento individual
+        float individualDuration = totalAnimationDuration / movements.Count;
+
         foreach (var movement in movements)
         {
             Vector2Int startPos = movement.Start;
@@ -64,7 +68,7 @@ public class Board : MonoBehaviour
             boardRenderer.SetTileColor(startPos, 0);
 
             // Lerpear la copia a la posición final
-            yield return StartCoroutine(LerpTile(tileCopy, startPos, endPos));
+            yield return StartCoroutine(LerpTile(tileCopy, startPos, endPos, individualDuration));
 
             // Poner la casilla de la posición final al valor que tenga la copia
             boardRenderer.SetTileValue(endPos, value);
@@ -80,11 +84,10 @@ public class Board : MonoBehaviour
         inputHandler.enabled = true;
     }
 
-    private IEnumerator LerpTile(GameObject tile, Vector2Int startPos, Vector2Int endPos)
+    private IEnumerator LerpTile(GameObject tile, Vector2Int startPos, Vector2Int endPos, float duration)
     {
         Vector3 start = tileCreator.GetWorldPosition(startPos);
         Vector3 end = tileCreator.GetWorldPosition(endPos);
-        float duration = 0.3f; // Duración de la animación
         float elapsed = 0f;
 
         while (elapsed < duration)
