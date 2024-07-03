@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,9 +26,9 @@ public class BoardAnimator
         inputHandler.enabled = false;
 
         Transform canvasTransform = Object.FindAnyObjectByType<Canvas>().transform;
-        Vector2 tileSize = tileCreator.GetTileSize();  // Obtener las dimensiones de las casillas
+        Vector2 tileSize = tileCreator.GetTileSize();
 
-        float individualDuration = totalAnimationDuration / movements.Count;
+        List<Coroutine> animationCoroutines = new List<Coroutine>();
 
         foreach (var movement in movements)
         {
@@ -43,16 +43,23 @@ public class BoardAnimator
             boardRenderer.SetTileValue(startPos, 0);
             boardRenderer.SetTileColor(startPos, 0);
 
-            yield return board.StartCoroutine(LerpTile(tileCopy, startPos, endPos, individualDuration));
-
-            boardRenderer.SetTileValue(endPos, value);
-
-            if (movement.IsMerge)
+            Coroutine animation = board.StartCoroutine(LerpTile(tileCopy, startPos, endPos, totalAnimationDuration, () =>
             {
-                boardRenderer.SetTileColor(endPos, value);
-            }
+                boardRenderer.SetTileValue(endPos, value);
 
-            Object.Destroy(tileCopy);
+                if (movement.IsMerge)
+                {
+                    boardRenderer.SetTileColor(endPos, value);
+                }
+
+                Object.Destroy(tileCopy);
+            }));
+            animationCoroutines.Add(animation);
+        }
+
+        foreach (var coroutine in animationCoroutines)
+        {
+            yield return coroutine;
         }
 
         boardRenderer.RenderBoard();
@@ -61,7 +68,7 @@ public class BoardAnimator
         inputHandler.enabled = true;
     }
 
-    private IEnumerator LerpTile(GameObject tile, Vector2Int startPos, Vector2Int endPos, float duration)
+    private IEnumerator LerpTile(GameObject tile, Vector2Int startPos, Vector2Int endPos, float duration, System.Action onComplete)
     {
         Vector3 start = tileCreator.GetWorldPosition(startPos);
         Vector3 end = tileCreator.GetWorldPosition(endPos);
@@ -75,5 +82,6 @@ public class BoardAnimator
         }
 
         tile.transform.position = end;
+        onComplete?.Invoke();
     }
 }

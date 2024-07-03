@@ -622,6 +622,7 @@ MonoBehaviour:
   board: {fileID: 787405220}
   tilePrefab: {fileID: 6343468834363193369, guid: 214339cec4ecba64c83db1e16c41993c, type: 3}
   scoreText: {fileID: 1538751794}
+  totalAnimationDuration: 0.5
 --- !u!114 &1113857310
 MonoBehaviour:
   m_ObjectHideFlags: 0

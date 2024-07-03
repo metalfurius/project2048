@@ -9,7 +9,7 @@ public class Board : MonoBehaviour
     [SerializeField] private Transform board;
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private float totalAnimationDuration = 2f;
+    [SerializeField] private float totalAnimationDuration = 0.2f;
 
     private D2048 d2048;
     private Score score;
