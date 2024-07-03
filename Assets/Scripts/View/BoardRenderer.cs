@@ -21,21 +21,29 @@ public class BoardRenderer
         {
             for (int j = 0; j < d2048.board.GetLength(1); j++)
             {
-                int _index = i * d2048.board.GetLength(1) + j;
-                Transform _child = board.GetChild(_index);
+                Vector2Int gridPosition = new Vector2Int(i, j);
                 int tileValue = d2048.board[i, j];
-                _child.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = tileValue > 0 ? tileValue.ToString() : "";
-                SetTileColor(_child, tileValue);
+                SetTileValue(gridPosition, tileValue);
+                SetTileColor(gridPosition, tileValue);
             }
         }
     }
 
-    private void SetTileColor(Transform tile, int value)
+    public void SetTileValue(Vector2Int gridPosition, int value)
     {
-        Image tileImage = tile.GetComponentInChildren<Image>();
-        if (tileImage == null)
-            return;
+        int index = gridPosition.x * d2048.board.GetLength(1) + gridPosition.y;
+        Transform tileTransform = board.GetChild(index);
+        tileTransform.GetComponentInChildren<TextMeshProUGUI>().text = value > 0 ? value.ToString() : "";
+    }
 
-        tileImage.color = tileColors.GetColor(value);
+    public void SetTileColor(Vector2Int gridPosition, int value)
+    {
+        int index = gridPosition.x * d2048.board.GetLength(1) + gridPosition.y;
+        Transform tileTransform = board.GetChild(index);
+        Image tileImage = tileTransform.GetComponentInChildren<Image>();
+        if (tileImage != null)
+        {
+            tileImage.color = tileColors.GetColor(value);
+        }
     }
 }

@@ -14,6 +14,7 @@ public class TileColors
     {
         tileColors = new Dictionary<int, Color>
         {
+            { 0, Color.white }, // White
             { 2, new Color(0.93f, 0.89f, 0.85f) }, // Light beige
             { 4, new Color(0.93f, 0.88f, 0.78f) }, // Light brown
             { 8, new Color(0.95f, 0.69f, 0.47f) }, // Light orange
