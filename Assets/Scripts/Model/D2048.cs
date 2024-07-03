@@ -278,6 +278,7 @@ public class D2048
         board[targetRow, targetColumn] *= 2;
         board[sourceRow, sourceColumn] = 0;
         AddScore(board[targetRow, targetColumn]);
+        movements.Add(new Movement(new Vector2Int(sourceRow, sourceColumn), new Vector2Int(targetRow, targetColumn), true));
     }
 
     private void MoveTile(int sourceRow, int sourceColumn, int targetRow, int targetColumn)

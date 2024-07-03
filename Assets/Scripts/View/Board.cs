@@ -73,6 +73,12 @@ public class Board : MonoBehaviour
             // Poner la casilla de la posición final al valor que tenga la copia
             boardRenderer.SetTileValue(endPos, value);
 
+            // Si es una fusión, actualizar el color de la casilla final
+            if (movement.IsMerge)
+            {
+                boardRenderer.SetTileColor(endPos, value);
+            }
+
             // Destruir la instancia copia
             Destroy(tileCopy);
         }
@@ -83,7 +89,6 @@ public class Board : MonoBehaviour
         // Reactivar el InputHandler después de la animación
         inputHandler.enabled = true;
     }
-
     private IEnumerator LerpTile(GameObject tile, Vector2Int startPos, Vector2Int endPos, float duration)
     {
         Vector3 start = tileCreator.GetWorldPosition(startPos);
