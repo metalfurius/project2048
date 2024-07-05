@@ -73,7 +73,7 @@ public class BoardAnimator
     {
         Vector3 end = tileCreator.GetWorldPosition(endPos);
 
-        Tween tween = tile.transform.DOMove(end, duration).SetEase(Ease.Linear);
+        Tween tween = tile.transform.DOMove(end, duration).SetEase(Ease.InOutCirc);
 
         yield return tween.WaitForCompletion();
 
