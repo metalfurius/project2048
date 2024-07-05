@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -43,7 +44,7 @@ public class BoardAnimator
             boardRenderer.SetTileValue(startPos, 0);
             boardRenderer.SetTileColor(startPos, 0);
 
-            Coroutine animation = board.StartCoroutine(LerpTile(tileCopy, startPos, endPos, totalAnimationDuration, () =>
+            Coroutine animation = board.StartCoroutine(DOTweenTile(tileCopy, endPos, totalAnimationDuration, () =>
             {
                 boardRenderer.SetTileValue(endPos, value);
 
@@ -68,20 +69,14 @@ public class BoardAnimator
         inputHandler.enabled = true;
     }
 
-    private IEnumerator LerpTile(GameObject tile, Vector2Int startPos, Vector2Int endPos, float duration, System.Action onComplete)
+    private IEnumerator DOTweenTile(GameObject tile, Vector2Int endPos, float duration, System.Action onComplete)
     {
-        Vector3 start = tileCreator.GetWorldPosition(startPos);
         Vector3 end = tileCreator.GetWorldPosition(endPos);
-        float elapsed = 0f;
 
-        while (elapsed < duration)
-        {
-            tile.transform.position = Vector3.Lerp(start, end, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
+        Tween tween = tile.transform.DOMove(end, duration).SetEase(Ease.Linear);
 
-        tile.transform.position = end;
+        yield return tween.WaitForCompletion();
+
         onComplete?.Invoke();
     }
 }
