@@ -38,7 +38,7 @@ public class Tests2048
 
         game.board[1, 0] = 2;
 
-        game.MoveTilesTESTS(D2048.Up);
+        game.MoveTiles(D2048.Up);
 
         Assert.AreEqual(2, game.board[0, 0]);
     }
@@ -50,7 +50,7 @@ public class Tests2048
         game.board[0, 0] = 2;
         game.board[1, 0] = 2;
 
-        game.MoveTilesTESTS(D2048.Up);
+        game.MoveTiles(D2048.Up);
 
         Assert.AreEqual(4, game.board[0, 0]);
     }
@@ -62,7 +62,7 @@ public class Tests2048
         game.board[0, 0] = 2;
         game.board[1, 0] = 2;
 
-        game.MoveTilesTESTS(D2048.Up);
+        game.MoveTiles(D2048.Up);
 
         Assert.AreEqual(0, game.board[1, 0]);
     }
@@ -84,7 +84,7 @@ public class Tests2048
         game.board[0, 3] = 2;
         game.board[2, 3] = 2;
 
-        game.MoveTilesTESTS(D2048.Up);
+        game.MoveTiles(D2048.Up);
 
         Assert.AreEqual(4, game.board[0, 0]);
         Assert.AreEqual(0, game.board[1, 0]);
@@ -105,7 +105,7 @@ public class Tests2048
 
         game.board[1, 0] = 2;
 
-        game.MoveTilesTESTS(D2048.Right);
+        game.MoveTiles(D2048.Right);
 
         Assert.AreEqual(2, game.board[1, 3]);
     }
@@ -117,7 +117,7 @@ public class Tests2048
         game.board[0, 0] = 2;
         game.board[1, 0] = 4;
 
-        game.MoveTilesTESTS(D2048.Up);
+        game.MoveTiles(D2048.Up);
 
         Assert.AreEqual(2, game.board[0, 0]);
     }
@@ -128,7 +128,7 @@ public class Tests2048
 
         game.board[1, 0] = 2;
 
-        game.MoveTilesTESTS(D2048.Down);
+        game.MoveTiles(D2048.Down);
 
         Assert.AreEqual(2, game.board[3, 0]);
     }
@@ -139,7 +139,7 @@ public class Tests2048
 
         game.board[1, 3] = 2;
 
-        game.MoveTilesTESTS(D2048.Left);
+        game.MoveTiles(D2048.Left);
 
         Assert.AreEqual(2, game.board[1, 0]);
     }
@@ -150,7 +150,7 @@ public class Tests2048
         Movement movementsTest = new Movement(new Vector2Int(1, 3), new Vector2Int(1, 0));
 
         game.board[1, 3] = 2;
-        game.MoveTilesTESTS(D2048.Left);
+        game.MoveTiles(D2048.Left);
 
         List<Movement> movements = game.GetMovements();
         Assert.AreEqual(movementsTest.Start, movements[0].Start);
@@ -172,7 +172,7 @@ public class Tests2048
         new Movement(new Vector2Int(3, 3), new Vector2Int(3, 0))
         };
 
-        game.MoveTilesTESTS(D2048.Left);
+        game.MoveTiles(D2048.Left);
 
         List<Movement> movements = game.GetMovements();
 

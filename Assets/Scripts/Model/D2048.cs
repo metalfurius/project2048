@@ -119,29 +119,6 @@ public class D2048
         {
             MoveLeft();
         }
-        GenerateNewTile();
-    }
-
-    public void MoveTilesTESTS(Vector2Int direction)
-    {
-        movements.Clear();
-
-        if (direction == Up)
-        {
-            MoveUp();
-        }
-        else if (direction == Down)
-        {
-            MoveDown();
-        }
-        else if (direction == Right)
-        {
-            MoveRight();
-        }
-        else if (direction == Left)
-        {
-            MoveLeft();
-        }
     }
 
     public List<Movement> GetMovements()
