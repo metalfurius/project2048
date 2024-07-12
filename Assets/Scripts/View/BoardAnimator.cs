@@ -44,7 +44,7 @@ public class BoardAnimator
             boardRenderer.SetTileValue(startPos, 0);
             boardRenderer.SetTileColor(startPos, 0);
 
-            Coroutine animation = board.StartCoroutine(DOTweenTile(tileCopy, endPos, totalAnimationDuration, () =>
+            Coroutine animation = board.StartCoroutine(MoveTile(tileCopy, endPos, totalAnimationDuration, () =>
             {
                 boardRenderer.SetTileValue(endPos, value);
 
@@ -69,7 +69,7 @@ public class BoardAnimator
         inputHandler.enabled = true;
     }
 
-    private IEnumerator DOTweenTile(GameObject tile, Vector2Int endPos, float duration, System.Action onComplete)
+    private IEnumerator MoveTile(GameObject tile, Vector2Int endPos, float duration, System.Action onComplete)
     {
         Vector3 end = tileCreator.GetWorldPosition(endPos);
 

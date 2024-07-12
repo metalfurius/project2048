@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;  // Asegúrate de agregar esto para la lista de movimientos
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
