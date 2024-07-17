@@ -15,17 +15,17 @@ public class TileColors
         tileColors = new Dictionary<int, Color>
         {
             { 0, Color.white }, // White
-            { 2, new Color(0.93f, 0.89f, 0.85f) }, // Light beige
-            { 4, new Color(0.93f, 0.88f, 0.78f) }, // Light brown
-            { 8, new Color(0.95f, 0.69f, 0.47f) }, // Light orange
-            { 16, new Color(0.96f, 0.58f, 0.39f) }, // Darker orange
-            { 32, new Color(0.96f, 0.49f, 0.37f) }, // Dark orange
-            { 64, new Color(0.96f, 0.37f, 0.23f) }, // Red orange
-            { 128, new Color(0.93f, 0.81f, 0.44f) }, // Gold
-            { 256, new Color(0.78f, 0.63f, 0.20f) }, // Dark gold
-            { 512, new Color(0.69f, 0.55f, 0.15f) }, // Darker gold
-            { 1024, new Color(0.60f, 0.49f, 0.13f) }, // Even darker gold
-            { 2048, new Color(0.49f, 0.38f, 0.10f) }  // Dark brown
+            { 2, new Color(0.93f, 0.89f, 0.85f) }, // Very light brown
+            { 4, new Color(0.92f, 0.75f, 0.6f) }, // Light brown
+            { 8, new Color(0.93f, 0.62f, 0.48f) }, // Light orange
+            { 16, new Color(0.94f, 0.5f, 0.37f) }, // Orange
+            { 32, new Color(0.95f, 0.38f, 0.27f) }, // Dark orange
+            { 64, new Color(0.96f, 0.27f, 0.18f) }, // Dark red
+            { 128, new Color(0.85f, 0.73f, 0.43f) }, // Gold
+            { 256, new Color(0.92f, 0.6f, 0.29f) }, // Orange gold
+            { 512, new Color(0.93f, 0.47f, 0.15f) }, // Dark orange gold
+            { 1024, new Color(0.95f, 0.34f, 0.02f) }, // Dark red gold
+            { 2048, new Color(1f, 0.84f, 0) }  // Bright gold
         };
     }
 

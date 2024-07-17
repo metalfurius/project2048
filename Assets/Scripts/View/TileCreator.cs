@@ -8,6 +8,7 @@ public class TileCreator
     private readonly GameObject tilePrefab;
     private readonly int rows;
     private readonly int columns;
+    private readonly TileColors tileColors;
 
     public TileCreator(Transform board, GameObject tilePrefab, int rows, int columns)
     {
@@ -15,6 +16,7 @@ public class TileCreator
         this.tilePrefab = tilePrefab;
         this.rows = rows;
         this.columns = columns;
+        this.tileColors = new TileColors();
     }
 
     public void CreateBoard()
@@ -67,5 +69,10 @@ public class TileCreator
         var _index = gridPosition.x * columns + gridPosition.y;
         var _tileImage = board.GetChild(_index).GetComponentInChildren<Image>();
         return _tileImage ? _tileImage.color : Color.white;
+    }
+
+    public Color GetColorForValue(int value)
+    {
+        return tileColors.GetColor(value);
     }
 }

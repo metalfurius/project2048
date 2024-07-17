@@ -12,7 +12,8 @@ public class BoardAnimator
     private readonly BoardRenderer boardRenderer;
     private readonly Score score;
     private readonly float totalAnimationDuration;
-
+    private GameObject newTileGameObject;
+    
     public BoardAnimator(Board board, InputHandler inputHandler, TileCreator tileCreator, BoardRenderer boardRenderer, Score score, float totalAnimationDuration)
     {
         this.board = board;
@@ -101,6 +102,12 @@ public class BoardAnimator
     {
         boardRenderer.RenderBoard();
         score.UpdateScore();
+        
+        if (newTileGameObject)
+        {
+            Object.Destroy(newTileGameObject);
+            newTileGameObject = null;
+        }
         EnableInputHandler();
     }
 
@@ -117,4 +124,25 @@ public class BoardAnimator
         yield return _tween.WaitForCompletion();
         onComplete?.Invoke();
     }
+
+    public void AnimateNewTile(Vector2Int newTilePosition)
+    {
+        var _value = board.GetTileValue(newTilePosition);
+        var _originalColor = tileCreator.GetColorForValue(_value);
+        var _canvasTransform = GetCanvasTransform();
+        var _tileSize = GetTileSize();
+        var _startPosition = tileCreator.GetWorldPosition(newTilePosition);
+        this.newTileGameObject = tileCreator.CreateTileInstance(_startPosition, _value, _canvasTransform, _tileSize, _originalColor);
+        board.StartCoroutine(BounceInTile(this.newTileGameObject, totalAnimationDuration));
+    }
+
+    private IEnumerator BounceInTile(GameObject tile, float duration)
+    {
+        // Assuming that original scale is Vector3.one
+        tile.transform.localScale = Vector3.zero;
+        Tween _tween = tile.transform.DOScale(Vector3.one, duration).SetEase(Ease.OutBounce);
+
+        yield return _tween.WaitForCompletion();
+    }
+    
 }

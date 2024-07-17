@@ -38,8 +38,9 @@ public class Board : MonoBehaviour
     private void MoveBoard(Vector2Int direction)
     {
         d2048.MoveTiles(direction);
-        d2048.GenerateNewTile();
+        var _newTilePosition = d2048.GenerateNewTile();
         StartCoroutine(boardAnimator.AnimateMovements(d2048.GetMovements()));
+        boardAnimator.AnimateNewTile(_newTilePosition);
     }
 
     public int GetTileValue(Vector2Int position)

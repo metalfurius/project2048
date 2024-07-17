@@ -34,19 +34,18 @@ public class D2048
         Score += points;
     }
 
-    public void GenerateNewTile()
+    public Vector2Int GenerateNewTile()
     {
         List<Vector2Int> _emptyTiles = new();
         GetEmptyTiles(_emptyTiles);
 
         if (_emptyTiles.Count <= 0)
-        {
-            return;
-        }
+            return new Vector2Int(-1, -1);
 
         GetNewRandomTileValue(_emptyTiles, out var _randomTile, out var _newTileValue);
         Board[_randomTile.x, _randomTile.y] = _newTileValue;
         NumberedTiles++;
+        return _randomTile;
     }
 
     private void GetNewRandomTileValue(List<Vector2Int> emptyTiles, out Vector2Int randomTile, out int newTileValue)
