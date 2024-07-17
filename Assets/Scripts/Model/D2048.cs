@@ -3,27 +3,27 @@ using UnityEngine;
 
 public class D2048
 {
-    public int score;
-    public int[,] board;
-    public int numberedTiles;
+    public int Score;
+    public readonly int[,] Board;
+    public int NumberedTiles;
 
     public static readonly Vector2Int Up = new(0, 1);
     public static readonly Vector2Int Down = new(0, -1);
     public static readonly Vector2Int Left = new(-1, 0);
     public static readonly Vector2Int Right = new(1, 0);
 
-    private List<Movement> movements;
+    private readonly List<Movement> movements;
 
     public D2048(Vector2Int boardSize)
     {
-        board = new int[boardSize.x, boardSize.y];
-        score = 0;
+        Board = new int[boardSize.x, boardSize.y];
+        Score = 0;
         movements = new List<Movement>();
     }
 
     public D2048(Vector2Int boardSize, int startingCells) : this(boardSize)
     {
-        for (int i = 0; i < startingCells; i++)
+        for (var _i = 0; _i < startingCells; _i++)
         {
             GenerateNewTile();
         }
@@ -31,40 +31,40 @@ public class D2048
 
     public void AddScore(int points)
     {
-        score += points;
+        Score += points;
     }
 
     public void GenerateNewTile()
     {
-        List<Vector2Int> emptyTiles = new();
-        GetEmptyTiles(emptyTiles);
+        List<Vector2Int> _emptyTiles = new();
+        GetEmptyTiles(_emptyTiles);
 
-        if (emptyTiles.Count <= 0)
+        if (_emptyTiles.Count <= 0)
         {
             return;
         }
 
-        GetNewRandomTileValue(emptyTiles, out Vector2Int randomTile, out int newTileValue);
-        board[randomTile.x, randomTile.y] = newTileValue;
-        numberedTiles++;
+        GetNewRandomTileValue(_emptyTiles, out var _randomTile, out var _newTileValue);
+        Board[_randomTile.x, _randomTile.y] = _newTileValue;
+        NumberedTiles++;
     }
 
     private void GetNewRandomTileValue(List<Vector2Int> emptyTiles, out Vector2Int randomTile, out int newTileValue)
     {
         randomTile = emptyTiles[Random.Range(0, emptyTiles.Count)];
-        int maxValueForNewTile = Mathf.Max(2, GetMaxTileValue() / 4);
-        newTileValue = GetRandomTileValue(maxValueForNewTile);
+        var _maxValueForNewTile = Mathf.Max(2, GetMaxTileValue() / 4);
+        newTileValue = GetRandomTileValue(_maxValueForNewTile);
     }
 
     private void GetEmptyTiles(List<Vector2Int> emptyTiles)
     {
-        for (int x = 0; x < board.GetLength(0); x++)
+        for (var _x = 0; _x < Board.GetLength(0); _x++)
         {
-            for (int y = 0; y < board.GetLength(1); y++)
+            for (var _y = 0; _y < Board.GetLength(1); _y++)
             {
-                if (board[x, y] == 0)
+                if (Board[_x, _y] == 0)
                 {
-                    emptyTiles.Add(new Vector2Int(x, y));
+                    emptyTiles.Add(new Vector2Int(_x, _y));
                 }
             }
         }
@@ -72,30 +72,30 @@ public class D2048
 
     private int GetMaxTileValue()
     {
-        int maxTileValue = 0;
-        for (int x = 0; x < board.GetLength(0); x++)
+        var _maxTileValue = 0;
+        for (var _x = 0; _x < Board.GetLength(0); _x++)
         {
-            for (int y = 0; y < board.GetLength(1); y++)
+            for (var _y = 0; _y < Board.GetLength(1); _y++)
             {
-                if (board[x, y] > maxTileValue)
+                if (Board[_x, _y] > _maxTileValue)
                 {
-                    maxTileValue = board[x, y];
+                    _maxTileValue = Board[_x, _y];
                 }
             }
         }
-        return maxTileValue;
+        return _maxTileValue;
     }
 
     private int GetRandomTileValue(int maxValueForNewTile)
     {
-        List<int> possibleValues = new List<int>();
-        int value = 2;
-        while (value <= maxValueForNewTile)
+        var _possibleValues = new List<int>();
+        var _value = 2;
+        while (_value <= maxValueForNewTile)
         {
-            possibleValues.Add(value);
-            value *= 2;
+            _possibleValues.Add(_value);
+            _value *= 2;
         }
-        return possibleValues[Random.Range(0, possibleValues.Count)];
+        return _possibleValues[Random.Range(0, _possibleValues.Count)];
     }
 
     public void MoveTiles(Vector2Int direction)
@@ -127,22 +127,20 @@ public class D2048
 
     private void MoveUp()
     {
-        for (int column = 0; column < board.GetLength(1); column++)
+        for (var _column = 0; _column < Board.GetLength(1); _column++)
         {
-            for (int row = 1; row < board.GetLength(0); row++)
+            for (var _row = 1; _row < Board.GetLength(0); _row++)
             {
-                if (!IsTileEmpty(row, column))
-                {
-                    int targetRow = FindTargetRow(row, column, Up);
+                if (IsTileEmpty(_row, _column)) continue;
+                var _targetRow = FindTargetRow(_row, _column, Up);
 
-                    if (CanMerge(row, column, targetRow, column))
-                    {
-                        MergeTiles(row, column, targetRow, column);
-                    }
-                    else
-                    {
-                        MoveTile(row, column, targetRow + 1, column);
-                    }
+                if (CanMerge(_row, _column, _targetRow, _column))
+                {
+                    MergeTiles(_row, _column, _targetRow, _column);
+                }
+                else
+                {
+                    MoveTile(_row, _column, _targetRow + 1, _column);
                 }
             }
         }
@@ -150,22 +148,20 @@ public class D2048
 
     private void MoveDown()
     {
-        for (int column = 0; column < board.GetLength(1); column++)
+        for (var _column = 0; _column < Board.GetLength(1); _column++)
         {
-            for (int row = board.GetLength(0) - 2; row >= 0; row--)
+            for (var _row = Board.GetLength(0) - 2; _row >= 0; _row--)
             {
-                if (!IsTileEmpty(row, column))
-                {
-                    int targetRow = FindTargetRow(row, column, Down);
+                if (IsTileEmpty(_row, _column)) continue;
+                var _targetRow = FindTargetRow(_row, _column, Down);
 
-                    if (CanMerge(row, column, targetRow, column))
-                    {
-                        MergeTiles(row, column, targetRow, column);
-                    }
-                    else
-                    {
-                        MoveTile(row, column, targetRow - 1, column);
-                    }
+                if (CanMerge(_row, _column, _targetRow, _column))
+                {
+                    MergeTiles(_row, _column, _targetRow, _column);
+                }
+                else
+                {
+                    MoveTile(_row, _column, _targetRow - 1, _column);
                 }
             }
         }
@@ -173,22 +169,20 @@ public class D2048
 
     private void MoveRight()
     {
-        for (int row = 0; row < board.GetLength(0); row++)
+        for (var _row = 0; _row < Board.GetLength(0); _row++)
         {
-            for (int column = board.GetLength(1) - 2; column >= 0; column--)
+            for (var _column = Board.GetLength(1) - 2; _column >= 0; _column--)
             {
-                if (!IsTileEmpty(row, column))
-                {
-                    int targetColumn = FindTargetColumn(row, column, Right);
+                if (IsTileEmpty(_row, _column)) continue;
+                var _targetColumn = FindTargetColumn(_row, _column, Right);
 
-                    if (CanMerge(row, column, row, targetColumn))
-                    {
-                        MergeTiles(row, column, row, targetColumn);
-                    }
-                    else
-                    {
-                        MoveTile(row, column, row, targetColumn - 1);
-                    }
+                if (CanMerge(_row, _column, _row, _targetColumn))
+                {
+                    MergeTiles(_row, _column, _row, _targetColumn);
+                }
+                else
+                {
+                    MoveTile(_row, _column, _row, _targetColumn - 1);
                 }
             }
         }
@@ -196,22 +190,20 @@ public class D2048
 
     private void MoveLeft()
     {
-        for (int row = 0; row < board.GetLength(0); row++)
+        for (var _row = 0; _row < Board.GetLength(0); _row++)
         {
-            for (int column = 1; column < board.GetLength(1); column++)
+            for (var _column = 1; _column < Board.GetLength(1); _column++)
             {
-                if (!IsTileEmpty(row, column))
-                {
-                    int targetColumn = FindTargetColumn(row, column, Left);
+                if (IsTileEmpty(_row, _column)) continue;
+                var _targetColumn = FindTargetColumn(_row, _column, Left);
 
-                    if (CanMerge(row, column, row, targetColumn))
-                    {
-                        MergeTiles(row, column, row, targetColumn);
-                    }
-                    else
-                    {
-                        MoveTile(row, column, row, targetColumn + 1);
-                    }
+                if (CanMerge(_row, _column, _row, _targetColumn))
+                {
+                    MergeTiles(_row, _column, _row, _targetColumn);
+                }
+                else
+                {
+                    MoveTile(_row, _column, _row, _targetColumn + 1);
                 }
             }
         }
@@ -219,52 +211,50 @@ public class D2048
 
     private bool IsTileEmpty(int row, int column)
     {
-        return board[row, column] == 0;
+        return Board[row, column] == 0;
     }
 
     private bool CanMerge(int sourceRow, int sourceColumn, int targetRow, int targetColumn)
     {
         return targetRow >= 0 && targetColumn >= 0 &&
-               targetRow < board.GetLength(0) && targetColumn < board.GetLength(1) &&
-               board[targetRow, targetColumn] == board[sourceRow, sourceColumn];
+               targetRow < Board.GetLength(0) && targetColumn < Board.GetLength(1) &&
+               Board[targetRow, targetColumn] == Board[sourceRow, sourceColumn];
     }
 
     private int FindTargetRow(int currentRow, int column, Vector2Int direction)
     {
-        int targetRow = currentRow - direction.y;
-        while (targetRow >= 0 && targetRow < board.GetLength(0) && board[targetRow, column] == 0)
+        var _targetRow = currentRow - direction.y;
+        while (_targetRow >= 0 && _targetRow < Board.GetLength(0) && Board[_targetRow, column] == 0)
         {
-            targetRow -= direction.y;
+            _targetRow -= direction.y;
         }
-        return targetRow;
+        return _targetRow;
     }
 
     private int FindTargetColumn(int row, int currentColumn, Vector2Int direction)
     {
-        int targetColumn = currentColumn + direction.x;
-        while (targetColumn >= 0 && targetColumn < board.GetLength(1) && board[row, targetColumn] == 0)
+        var _targetColumn = currentColumn + direction.x;
+        while (_targetColumn >= 0 && _targetColumn < Board.GetLength(1) && Board[row, _targetColumn] == 0)
         {
-            targetColumn += direction.x;
+            _targetColumn += direction.x;
         }
-        return targetColumn;
+        return _targetColumn;
     }
 
     private void MergeTiles(int sourceRow, int sourceColumn, int targetRow, int targetColumn)
     {
-        board[targetRow, targetColumn] *= 2;
-        board[sourceRow, sourceColumn] = 0;
-        AddScore(board[targetRow, targetColumn]);
+        Board[targetRow, targetColumn] *= 2;
+        Board[sourceRow, sourceColumn] = 0;
+        AddScore(Board[targetRow, targetColumn]);
         movements.Add(new Movement(new Vector2Int(sourceRow, sourceColumn), new Vector2Int(targetRow, targetColumn), true));
     }
 
     private void MoveTile(int sourceRow, int sourceColumn, int targetRow, int targetColumn)
     {
-        if (targetRow != sourceRow || targetColumn != sourceColumn)
-        {
-            board[targetRow, targetColumn] = board[sourceRow, sourceColumn];
-            board[sourceRow, sourceColumn] = 0;
+        if (targetRow == sourceRow && targetColumn == sourceColumn) return;
+        Board[targetRow, targetColumn] = Board[sourceRow, sourceColumn];
+        Board[sourceRow, sourceColumn] = 0;
 
-            movements.Add(new Movement(new Vector2Int(sourceRow, sourceColumn), new Vector2Int(targetRow, targetColumn)));
-        }
+        movements.Add(new Movement(new Vector2Int(sourceRow, sourceColumn), new Vector2Int(targetRow, targetColumn)));
     }
 }

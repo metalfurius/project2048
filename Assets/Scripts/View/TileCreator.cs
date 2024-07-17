@@ -4,10 +4,10 @@ using UnityEngine.UI;
 
 public class TileCreator
 {
-    private Transform board;
-    private GameObject tilePrefab;
-    private int rows;
-    private int columns;
+    private readonly Transform board;
+    private readonly GameObject tilePrefab;
+    private readonly int rows;
+    private readonly int columns;
 
     public TileCreator(Transform board, GameObject tilePrefab, int rows, int columns)
     {
@@ -19,56 +19,53 @@ public class TileCreator
 
     public void CreateBoard()
     {
-        for (int i = 0; i < rows; i++)
+        for (var _i = 0; _i < rows; _i++)
         {
-            for (int j = 0; j < columns; j++)
+            for (var _j = 0; _j < columns; _j++)
             {
-                CreateTile(i, j);
+                CreateTile(_i, _j);
             }
         }
     }
 
     private void CreateTile(int x, int y)
     {
-        GameObject newTile = GameObject.Instantiate(tilePrefab, Vector2.zero, Quaternion.identity);
-        newTile.transform.SetParent(board, false);
-        newTile.name = $"Tile_{x}_{y}";
+        var _newTile = Object.Instantiate(tilePrefab, Vector2.zero, Quaternion.identity);
+        _newTile.transform.SetParent(board, false);
+        _newTile.name = $"Tile_{x}_{y}";
     }
 
     public GameObject CreateTileInstance(Vector3 position, int value, Transform parent, Vector2 size, Color color)
     {
-        GameObject tileInstance = GameObject.Instantiate(tilePrefab, position, Quaternion.identity, parent);
-        tileInstance.GetComponentInChildren<TextMeshProUGUI>().text = value > 0 ? value.ToString() : "";
-        RectTransform rectTransform = tileInstance.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = size;
-        Image tileImage = tileInstance.GetComponentInChildren<Image>();
-        if (tileImage != null)
+        var _tileInstance = Object.Instantiate(tilePrefab, position, Quaternion.identity, parent);
+        _tileInstance.GetComponentInChildren<TextMeshProUGUI>().text = value > 0 ? value.ToString() : "";
+        var _rectTransform = _tileInstance.GetComponent<RectTransform>();
+        _rectTransform.sizeDelta = size;
+        var _tileImage = _tileInstance.GetComponentInChildren<Image>();
+        if (_tileImage)
         {
-            tileImage.color = color;
+            _tileImage.color = color;
         }
-        return tileInstance;
+        return _tileInstance;
     }
 
     public Vector3 GetWorldPosition(Vector2Int gridPosition)
     {
-        int index = gridPosition.x * columns + gridPosition.y;
-        return board.GetChild(index).position;
+        var _index = gridPosition.x * columns + gridPosition.y;
+        return board.GetChild(_index).position;
     }
 
     public Vector2 GetTileSize()
     {
-        if (board.childCount > 0)
-        {
-            RectTransform rectTransform = board.GetChild(0).GetComponent<RectTransform>();
-            return rectTransform.sizeDelta;
-        }
-        return Vector2.zero;
+        if (board.childCount <= 0) return Vector2.zero;
+        var _rectTransform = board.GetChild(0).GetComponent<RectTransform>();
+        return _rectTransform.sizeDelta;
     }
 
     public Color GetTileColor(Vector2Int gridPosition)
     {
-        int index = gridPosition.x * columns + gridPosition.y;
-        Image tileImage = board.GetChild(index).GetComponentInChildren<Image>();
-        return tileImage != null ? tileImage.color : Color.white;
+        var _index = gridPosition.x * columns + gridPosition.y;
+        var _tileImage = board.GetChild(_index).GetComponentInChildren<Image>();
+        return _tileImage ? _tileImage.color : Color.white;
     }
 }

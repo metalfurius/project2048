@@ -2,8 +2,8 @@ using TMPro;
 
 public class Score
 {
-    private TextMeshProUGUI scoreText;
-    private D2048 d2048;
+    private readonly TextMeshProUGUI scoreText;
+    private readonly D2048 d2048;
 
     public Score(TextMeshProUGUI scoreText, D2048 d2048)
     {
@@ -13,9 +13,9 @@ public class Score
 
     public void UpdateScore()
     {
-        if (scoreText != null)
+        if (scoreText)
         {
-            scoreText.text = "Score: " + d2048.score.ToString();
+            scoreText.text = "Score: " + d2048.Score.ToString();
         }
     }
 }

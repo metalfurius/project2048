@@ -20,14 +20,14 @@ public class Board : MonoBehaviour
     {
         this.d2048 = d2048;
         this.inputHandler = GetComponent<InputHandler>();
-        this.tileCreator = new TileCreator(board, tilePrefab, d2048.board.GetLength(0), d2048.board.GetLength(1));
+        this.tileCreator = new TileCreator(board, tilePrefab, d2048.Board.GetLength(0), d2048.Board.GetLength(1));
         this.boardRenderer = new BoardRenderer(board, d2048);
         this.score = new Score(scoreText, d2048);
         this.boardAnimator = new BoardAnimator(this, inputHandler, tileCreator, boardRenderer, score, totalAnimationDuration);
 
         tileCreator.CreateBoard();
         boardRenderer.RenderBoard();
-        board.GetComponent<GridLayoutGroup>().constraintCount = d2048.board.GetLength(0);
+        board.GetComponent<GridLayoutGroup>().constraintCount = d2048.Board.GetLength(0);
 
         if (inputHandler != null)
         {
@@ -44,6 +44,6 @@ public class Board : MonoBehaviour
 
     public int GetTileValue(Vector2Int position)
     {
-        return d2048.board[position.x, position.y];
+        return d2048.Board[position.x, position.y];
     }
 }

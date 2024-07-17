@@ -1,16 +1,17 @@
 ﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BoardAnimator
 {
-    private Board board;
-    private InputHandler inputHandler;
-    private TileCreator tileCreator;
-    private BoardRenderer boardRenderer;
-    private Score score;
-    private float totalAnimationDuration;
+    private readonly Board board;
+    private readonly InputHandler inputHandler;
+    private readonly TileCreator tileCreator;
+    private readonly BoardRenderer boardRenderer;
+    private readonly Score score;
+    private readonly float totalAnimationDuration;
 
     public BoardAnimator(Board board, InputHandler inputHandler, TileCreator tileCreator, BoardRenderer boardRenderer, Score score, float totalAnimationDuration)
     {
@@ -26,11 +27,11 @@ public class BoardAnimator
     {
         DisableInputHandler();
 
-        Transform canvasTransform = GetCanvasTransform();
-        Vector2 tileSize = GetTileSize();
-        List<Coroutine> animationCoroutines = StartTileAnimations(movements, canvasTransform, tileSize);
+        var _canvasTransform = GetCanvasTransform();
+        var _tileSize = GetTileSize();
+        var _animationCoroutines = StartTileAnimations(movements, _canvasTransform, _tileSize);
 
-        yield return WaitForCoroutinesToFinish(animationCoroutines);
+        yield return WaitForCoroutinesToFinish(_animationCoroutines);
 
         FinalizeAnimation();
     }
@@ -52,32 +53,24 @@ public class BoardAnimator
 
     private List<Coroutine> StartTileAnimations(List<Movement> movements, Transform canvasTransform, Vector2 tileSize)
     {
-        List<Coroutine> animationCoroutines = new List<Coroutine>();
-
-        foreach (var movement in movements)
-        {
-            Coroutine animation = StartTileAnimation(movement, canvasTransform, tileSize);
-            animationCoroutines.Add(animation);
-        }
-
-        return animationCoroutines;
+        return movements.Select(movement => StartTileAnimation(movement, canvasTransform, tileSize)).ToList();
     }
 
     private Coroutine StartTileAnimation(Movement movement, Transform canvasTransform, Vector2 tileSize)
     {
-        Vector2Int startPos = movement.Start;
-        Vector2Int endPos = movement.End;
-        int value = board.GetTileValue(endPos);
-        Color originalColor = tileCreator.GetTileColor(startPos);
+        var _startPos = movement.Start;
+        var _endPos = movement.End;
+        var _value = board.GetTileValue(_endPos);
+        var _originalColor = tileCreator.GetTileColor(_startPos);
 
-        Vector3 startWorldPos = tileCreator.GetWorldPosition(startPos);
-        GameObject tileCopy = tileCreator.CreateTileInstance(startWorldPos, value, canvasTransform, tileSize, originalColor);
+        var _startWorldPos = tileCreator.GetWorldPosition(_startPos);
+        var _tileCopy = tileCreator.CreateTileInstance(_startWorldPos, _value, canvasTransform, tileSize, _originalColor);
 
-        ClearTileAtStartPosition(startPos);
+        ClearTileAtStartPosition(_startPos);
 
-        return board.StartCoroutine(MoveTile(tileCopy, endPos, totalAnimationDuration, () =>
+        return board.StartCoroutine(MoveTile(_tileCopy, _endPos, totalAnimationDuration, () =>
         {
-            SetTileAtEndPosition(endPos, value, movement.IsMerge, tileCopy);
+            SetTileAtEndPosition(_endPos, _value, movement.IsMerge, _tileCopy);
         }));
     }
 
@@ -101,10 +94,7 @@ public class BoardAnimator
 
     private IEnumerator WaitForCoroutinesToFinish(List<Coroutine> coroutines)
     {
-        foreach (var coroutine in coroutines)
-        {
-            yield return coroutine;
-        }
+        return coroutines.GetEnumerator();
     }
 
     private void FinalizeAnimation()
@@ -121,10 +111,10 @@ public class BoardAnimator
 
     private IEnumerator MoveTile(GameObject tile, Vector2Int endPos, float duration, System.Action onComplete)
     {
-        Vector3 end = tileCreator.GetWorldPosition(endPos);
-        Tween tween = tile.transform.DOMove(end, duration).SetEase(Ease.InOutCirc);
+        var _end = tileCreator.GetWorldPosition(endPos);
+        Tween _tween = tile.transform.DOMove(_end, duration).SetEase(Ease.InOutCirc);
 
-        yield return tween.WaitForCompletion();
+        yield return _tween.WaitForCompletion();
         onComplete?.Invoke();
     }
 }

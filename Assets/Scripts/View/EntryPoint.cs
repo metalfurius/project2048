@@ -9,8 +9,8 @@ public class EntryPoint : MonoBehaviour
     private int startingCells = 7;
     private void Start()
     {
-        D2048 d2048 = new(new Vector2Int(size.x,size.y), startingCells);
-        Board board = FindObjectOfType<Board>();
-        board.Setup(d2048);
+        D2048 _d2048 = new(new Vector2Int(size.x,size.y), startingCells);
+        var _board = FindObjectOfType<Board>();
+        _board.Setup(_d2048);
     }
 }

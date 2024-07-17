@@ -31,10 +31,6 @@ public class TileColors
 
     public Color GetColor(int value)
     {
-        if (tileColors.TryGetValue(value, out Color color))
-        {
-            return color;
-        }
-        return Color.white;
+        return tileColors.TryGetValue(value, out var _color) ? _color : Color.white;
     }
 }
