@@ -84,13 +84,28 @@ public class BoardAnimator
     private void SetTileAtEndPosition(Vector2Int endPos, int value, bool isMerge, GameObject tileCopy)
     {
         boardRenderer.SetTileValue(endPos, value);
+        boardRenderer.SetTileColor(endPos, value);
 
         if (isMerge)
         {
-            boardRenderer.SetTileColor(endPos, value);
-        }
+            const float scaleUpDuration = 0.2f;
+            var _enlargedScale = new Vector3(1.2f, 1.2f, 1.2f);
 
-        Object.Destroy(tileCopy);
+            tileCopy.transform.DOScale(_enlargedScale, scaleUpDuration).OnComplete(() =>
+            {
+                const float scaleDownDuration = 0.2f;
+                var _originalScale = new Vector3(1f, 1f, 1f);
+
+                tileCopy.transform.DOScale(_originalScale, scaleDownDuration).OnComplete(() =>
+                {
+                    Object.Destroy(tileCopy);
+                });
+            });
+        }
+        else
+        {
+            Object.Destroy(tileCopy);
+        }
     }
 
     private IEnumerator WaitForCoroutinesToFinish(List<Coroutine> coroutines)

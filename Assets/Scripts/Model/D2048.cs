@@ -124,6 +124,8 @@ public class D2048
         return new List<Movement>(movements);
     }
 
+    public bool LostGame() => movements == null;
+
     private void MoveUp()
     {
         for (var _column = 0; _column < Board.GetLength(1); _column++)
